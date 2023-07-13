@@ -1,4 +1,7 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
+
+const {schema} = require('./secure/userValidation');
 
 const userSchema = new mongoose.Schema({
     userName: {
