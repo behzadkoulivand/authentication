@@ -6,4 +6,6 @@ const router = Router();
 
 router.post("/users/register", usercontroller.createUser);
 
+router.get("/users/list", usercontroller.getList);
+
 module.exports = router;
