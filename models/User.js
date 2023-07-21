@@ -1,43 +1,23 @@
-const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
+const { DataTypes } = require('sequelize');
 
-const {schema} = require('./secure/userValidation');
+const sequelize = require('../config/database');
 
-const userSchema = new mongoose.Schema({
+const User = sequelize.define("User",{
     userName: {
-        type: String,
-        required: true
+        type: DataTypes.STRING,
+        allowNull: false
     },
+
     email: {
-        type: String,
-        required: true
+        type: DataTypes.STRING,
+        allowNull: false,
+        primaryKey: true,
     },
+
     password: {
-        type: String,
-        required: true
-    },
-    createdAt: {
-        type: Date,
-        default: Date.now
+        type: DataTypes.STRING,
+        allowNull: false
     }
 });
 
-userSchema.statics.userValidation = function (body) {
-    return schema.validate(body, { abortEarly: false });
-};
-
-userSchema.pre("save", function (next) {
-    let user = this;
-
-    if (!user.isModified("password")) return next();
-
-    bcrypt.hash(user.password, 10, (err, hash) => {
-        if (err) return next(err);
-
-        user.password = hash;
-        next();
-    });
-});
-
-const model = mongoose.model("User", userSchema);
-module.exports = model;
+module.exports = User;
